@@ -23,7 +23,7 @@ public class DestroyByContact : MonoBehaviour
 
 	//Destroying game objects on entering boundary
 	void OnTriggerEnter(Collider other) {
-		if (other.CompareTag ("Boundary") || other.CompareTag ("Enemy")); 
+		if (other.CompareTag ("Boundary") || other.CompareTag ("Enemy")) 
 		{
 			return;
 		}
@@ -38,7 +38,7 @@ public class DestroyByContact : MonoBehaviour
 		Instantiate(PlayerExplosion, other.transform.position, other.transform.rotation);
 		gameController.GameOver ();
 		}
-//		gameController.AddScore (scoreValue);
+		gameController.AddScore (scoreValue);
 		Destroy(other.gameObject);
 		Destroy(gameObject);
 	}
