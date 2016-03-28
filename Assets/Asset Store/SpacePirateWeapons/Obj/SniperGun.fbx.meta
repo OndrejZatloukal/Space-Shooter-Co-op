@@ -3,9 +3,24 @@ guid: 7f9b16389e5e3e54b9c51ef53e0c7210
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
+    100000: Cylinder_003
+    100002: Cylinder_005
+    100004: Cylinder_006
+    100006: //RootNode
+    400000: Cylinder_003
+    400002: Cylinder_005
+    400004: Cylinder_006
+    400006: //RootNode
+    2300000: Cylinder_003
+    2300002: Cylinder_005
+    2300004: Cylinder_006
+    3300000: Cylinder_003
+    3300002: Cylinder_005
+    3300004: Cylinder_006
     4300000: Cylinder_006
     4300002: Cylinder_005
     4300004: Cylinder_003
+    11100000: //RootNode
   materials:
     importMaterials: 1
     materialName: 0
