@@ -10,15 +10,23 @@ public class MissileController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		playerTransform = GameObject.FindGameObjectWithTag ("Player").transform;
+		GameObject playerObject = GameObject.FindGameObjectWithTag ("Player");
+		if (playerObject != null)
+		{
+			playerTransform = playerObject.transform;
+		}
 
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-		if ( Vector3.Distance (transform.position, playerTransform.position) < 5) { 
-			Instantiate (missileExplosion, transform.position, transform.rotation);
-			Destroy (gameObject);
+		if (playerTransform != null)
+		{
+			if ( Vector3.Distance (transform.position, playerTransform.position) < 5)
+			{ 
+				Instantiate (missileExplosion, transform.position, transform.rotation);
+				Destroy (gameObject);
+			}
 		}
 	}
 }
