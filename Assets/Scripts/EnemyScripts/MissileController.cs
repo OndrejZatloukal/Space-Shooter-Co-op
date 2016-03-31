@@ -8,7 +8,8 @@ public class MissileController : MonoBehaviour {
 
 	private Animator anim;
 
-	public GameObject missileExplosion; 
+	public GameObject missileExplosion;
+	public float triggerRadius;
 	public float flashSpeed;
 	public float flashIncrement;
 
@@ -25,15 +26,18 @@ public class MissileController : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void FixedUpdate () {
-		anim.speed = flashSpeed - (Vector3.Distance (transform.position, playerTransform.position) / flashIncrement); 
+	void FixedUpdate () { 
 		if (playerTransform != null)
 		{
-			if ( Vector3.Distance (transform.position, playerTransform.position) < 5)
+			anim.speed = flashSpeed - (Vector3.Distance (transform.position, playerTransform.position) / flashIncrement);
+
+			if (Vector3.Distance (transform.position, playerTransform.position) < triggerRadius)
 			{ 
 				Instantiate (missileExplosion, transform.position, transform.rotation);
 				Destroy (gameObject);
 			}
+		} else {
+			anim.speed = 1.0f;
 		}
 	}
 }
