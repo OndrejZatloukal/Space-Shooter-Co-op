@@ -10,14 +10,17 @@ public class GameController : MonoBehaviour
 	public float spawnWait;
 	public float startWait;
 	public float waveWait;
+	public int hazardType;
 
 	public GUIText scoreText;
 	public GUIText restartText;
 	public GUIText gameOverText;
+	public GUIText waveText;
 
 	private bool gameOver;
 	private bool restart;
 	private int score;
+	private int wave;
 	//Asteroid spawning
 	void Start ()
 	{
@@ -25,7 +28,9 @@ public class GameController : MonoBehaviour
 		restart = false;
 		restartText.text = "";
 		gameOverText.text = "";
+		waveText.text = "";
 		score = 0;
+		wave = 0;
 		UpdateScore ();
 		StartCoroutine (SpawnWaves ());
 	}
@@ -47,15 +52,23 @@ public class GameController : MonoBehaviour
 		yield return new WaitForSeconds (startWait);
 		while (true)
 		{
+			UpdateWave ();
 			for (int i = 0; i < hazardCount; i++) 
 			{
-				GameObject hazard = hazards[Random.Range (0, hazards.Length)];
+				GameObject hazard = hazards[Random.Range (0, hazardType)];
 				Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
 				Quaternion spawnRotation = Quaternion.identity;
 				Instantiate (hazard, spawnPosition, spawnRotation);
 				yield return new WaitForSeconds (spawnWait);
 			}
 			yield return new WaitForSeconds (waveWait);
+
+			hazardCount += 2;
+			hazardType += 1;
+
+			if(hazardType > hazards.Length) {
+				hazardType = hazards.Length;
+			}
 
 			if (gameOver) 
 			{
@@ -73,9 +86,16 @@ public class GameController : MonoBehaviour
 		score += newScoreValue;
 		UpdateScore ();
 	}
+		
 	void UpdateScore ()
 	{
 		scoreText.text = "Score: " + score;
+	}
+
+	void UpdateWave ()
+	{
+		wave += 1;
+		waveText.text = "Wave: " + wave;
 	}
 
 	public void GameOver ()
