@@ -33,9 +33,12 @@ public class MissileController : MonoBehaviour {
 
 			if (Vector3.Distance (transform.position, playerTransform.position) < triggerRadius)
 			{ 
-				Instantiate (missileExplosion, transform.position, transform.rotation);
+				this.tag = "Dead";
+				GameObject Explosion = Instantiate (missileExplosion, transform.position, transform.rotation) as GameObject;
+				Explosion.GetComponent<MissileExplosion>().blastRadius = triggerRadius;
 				Destroy (gameObject);
 			}
+
 		} else {
 			anim.speed = 1.0f;
 		}

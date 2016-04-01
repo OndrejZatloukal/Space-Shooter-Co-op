@@ -22,14 +22,20 @@ public class DestroyByContact : MonoBehaviour
 	}
 		
 	void OnTriggerEnter(Collider other) {
-		if (other.CompareTag ("Boundary") || other.CompareTag ("Enemy")) 
+		if (other.CompareTag ("Boundary") || other.CompareTag ("Enemy") || this.tag == "Dead") 
 		{
 			return;
 		}
 	//Asteroid Explosion
 		if (explosion != null)
 		{
-			Instantiate(explosion, transform.position, transform.rotation);
+			if (explosion.tag == "Explosion")
+			{
+				GameObject Explosion = Instantiate (explosion, transform.position, transform.rotation) as GameObject;
+				Explosion.GetComponent<MissileExplosion>().blastRadius = GetComponent<MissileController>().triggerRadius;
+			} else {
+				Instantiate (explosion, transform.position, transform.rotation);
+			}
 		}
 	//Player Explosion
 		if (other.tag == "Player")
