@@ -29,7 +29,7 @@ public class MissileController : MonoBehaviour {
 	void FixedUpdate () { 
 		if (playerTransform != null)
 		{
-			anim.speed = flashSpeed - (Vector3.Distance (transform.position, playerTransform.position) / flashIncrement);
+			anim.speed = Mathf.Max (1, flashSpeed - (Vector3.Distance (transform.position, playerTransform.position) / flashIncrement));
 
 			if (Vector3.Distance (transform.position, playerTransform.position) < triggerRadius)
 			{ 

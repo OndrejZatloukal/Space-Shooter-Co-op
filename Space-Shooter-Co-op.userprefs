@@ -1,18 +1,10 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\EvasiveManouver.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\EnemyScripts\MissileController.cs">
     <Files>
-      <File FileName="Assets\Scripts\EvasiveManouver.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\MissileController.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\DestroyByContact.cs" Line="39" Column="1" />
-      <File FileName="Assets\Scripts\BGScroller.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\DestroyByBoundary.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\DestroyByTime.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Mover.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\PlayerController.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\RandomRotator.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\WeaponController.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\GameController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\EnemyScripts\MissileController.cs" Line="34" Column="81" />
+      <File FileName="Assets\Scripts\EnemyScripts\EvasiveManouverMissile.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\MissileExplosion.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
