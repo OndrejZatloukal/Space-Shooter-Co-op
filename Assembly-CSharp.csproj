@@ -55,6 +55,7 @@
      <Compile Include="Assets\Scripts\EnemyScripts\RandomRotator.cs" />
      <Compile Include="Assets\Scripts\GameControllerSripts\BGScroller.cs" />
      <Compile Include="Assets\Scripts\GameControllerSripts\GameController.cs" />
+     <Compile Include="Assets\Scripts\GameControllerSripts\PowerupController.cs" />
      <Compile Include="Assets\Scripts\MissileExplosion.cs" />
      <Compile Include="Assets\Scripts\PlayerScripts\PlayerController.cs" />
      <Compile Include="Assets\Scripts\PlayerScripts\WeaponController.cs" />

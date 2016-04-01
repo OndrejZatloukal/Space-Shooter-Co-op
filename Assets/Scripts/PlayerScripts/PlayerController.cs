@@ -74,12 +74,14 @@ public class PlayerController : MonoBehaviour
 	// powerup functions yeeey
 	//---------------------------------------------------------------------------
 
-	IEnumerator Firerate ()
+	public IEnumerator Firerate ()
 	{
 		fireRateDown = Time.time + 5;
+		Debug.Log (fireRateDown);
 		if (fireRatePower == false) {
 			fireRatePower = true;
 			fireRate = fireRate / 2;
+			Debug.Log (Time.time);
 			yield return new WaitWhile (() => fireRateDown > Time.time);
 			fireRate = fireRate * 2;
 			fireRatePower = false;
