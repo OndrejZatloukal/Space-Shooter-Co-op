@@ -5,12 +5,14 @@ using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour 
 {
 	public GameObject[] hazards;
+	public int hazardCount;
+	public int hazardCountInc;
+	public float hazardType;
+	public float hazardIncrease;
 	public Vector3 spawnValues;
-	public int hazardCount; 
 	public float spawnWait;
 	public float startWait;
 	public float waveWait;
-	public int hazardType;
 
 	public GUIText scoreText;
 	public GUIText restartText;
@@ -28,10 +30,10 @@ public class GameController : MonoBehaviour
 		restart = false;
 		restartText.text = "";
 		gameOverText.text = "";
-		waveText.text = "";
 		score = 0;
 		wave = 0;
 		UpdateScore ();
+		UpdateWave ();
 		StartCoroutine (SpawnWaves ());
 	}
 
@@ -52,10 +54,11 @@ public class GameController : MonoBehaviour
 		yield return new WaitForSeconds (startWait);
 		while (true)
 		{
+			wave += 1;
 			UpdateWave ();
 			for (int i = 0; i < hazardCount; i++) 
 			{
-				GameObject hazard = hazards[Random.Range (0, hazardType)];
+				GameObject hazard = hazards[Random.Range (0, Mathf.FloorToInt (hazardType + .00001f))];
 				Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
 				Quaternion spawnRotation = Quaternion.identity;
 				Instantiate (hazard, spawnPosition, spawnRotation);
@@ -63,12 +66,8 @@ public class GameController : MonoBehaviour
 			}
 			yield return new WaitForSeconds (waveWait);
 
-			hazardCount += 2;
-			hazardType += 1;
-
-			if(hazardType > hazards.Length) {
-				hazardType = hazards.Length;
-			}
+			hazardCount += hazardCountInc;
+			hazardType = Mathf.Min (hazardType + (1 / hazardIncrease), hazards.Length);
 
 			if (gameOver) 
 			{
@@ -94,7 +93,6 @@ public class GameController : MonoBehaviour
 
 	void UpdateWave ()
 	{
-		wave += 1;
 		waveText.text = "Wave: " + wave;
 	}
 
