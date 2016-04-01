@@ -21,20 +21,32 @@ public class PlayerController : MonoBehaviour
 	public float fireRate;
 
 	private float nextFire;
+	private float fireRateDown;
+	private bool fireRatePower;
 
 	void Update ()
 	{
+
 		if (Input.GetButton ("Fire1") && Time.time > nextFire) {
 			nextFire = Time.time + fireRate;
 			Instantiate (shot, shotSpawn.position, shotSpawn.rotation);
 			audioSource.Play ();
+		} 
+
+		if (Input.GetKeyDown (KeyCode.P)) 
+		{
+			StartCoroutine (Firerate ());
+			Debug.Log("p key was pressed");
 		}
+
+
 	}
 
 	void Start ()
 	{
 		rb = GetComponent<Rigidbody>();
 		audioSource = GetComponent<AudioSource>();
+		fireRatePower = false;
 	}
 		
 
@@ -58,4 +70,22 @@ public class PlayerController : MonoBehaviour
 	//ship rotation
 		rb.rotation = Quaternion.Euler (0.0f, 0.0f, rb.velocity.x * -tilt);
 	}	
+
+	// powerup functions yeeey
+	//---------------------------------------------------------------------------
+
+	IEnumerator Firerate ()
+	{
+		fireRateDown = Time.time + 5;
+		if (fireRatePower == false) {
+			fireRatePower = true;
+			fireRate = fireRate / 2;
+			yield return new WaitWhile (() => fireRateDown > Time.time);
+			fireRate = fireRate * 2;
+			fireRatePower = false;
+		}
+	}
+
+
+
 }
