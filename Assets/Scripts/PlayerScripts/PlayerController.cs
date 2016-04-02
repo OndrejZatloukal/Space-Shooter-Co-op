@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
 {
 	private Rigidbody rb;
 	private AudioSource audioSource;
+	private MeshCollider collider;
 
 	public float speed;
 	public float tilt;
@@ -23,6 +24,8 @@ public class PlayerController : MonoBehaviour
 	private float nextFire;
 	private float fireRateDown;
 	private bool fireRatePower;
+
+	private GameObject shield;
 
 	void Update ()
 	{
@@ -39,6 +42,11 @@ public class PlayerController : MonoBehaviour
 			Debug.Log("p key was pressed");
 		}
 
+		if (Input.GetKeyDown (KeyCode.O)) 
+		{
+			Shield ();
+			Debug.Log("o key was pressed");
+		}
 
 	}
 
@@ -46,7 +54,14 @@ public class PlayerController : MonoBehaviour
 	{
 		rb = GetComponent<Rigidbody>();
 		audioSource = GetComponent<AudioSource>();
+		collider = GetComponent<MeshCollider>();
 		fireRatePower = false;
+		shield = GameObject.FindWithTag("Shield");
+		//shield.SetActive (false);
+		if (shield.activeSelf)
+		{
+			collider.enabled = false;
+		}
 	}
 		
 
@@ -71,23 +86,39 @@ public class PlayerController : MonoBehaviour
 		rb.rotation = Quaternion.Euler (0.0f, 0.0f, rb.velocity.x * -tilt);
 	}	
 
-	// powerup functions yeeey
+	// powerup functions
 	//---------------------------------------------------------------------------
+
+	public void StartPowerup (int index)
+	{
+		if (index == 1) {
+			StartCoroutine (Firerate ());
+		} else if (index == 2) {
+			Shield ();
+		}
+	}
 
 	public IEnumerator Firerate ()
 	{
 		fireRateDown = Time.time + 5;
-		Debug.Log (fireRateDown);
-		if (fireRatePower == false) {
+		if (fireRatePower == false)
+		{
 			fireRatePower = true;
 			fireRate = fireRate / 2;
-			Debug.Log (Time.time);
 			yield return new WaitWhile (() => fireRateDown > Time.time);
 			fireRate = fireRate * 2;
 			fireRatePower = false;
 		}
 	}
 
-
+	public void Shield ()
+	{
+		if (shield.activeSelf) {
+			return;
+		} else {
+			shield.SetActive(true);
+			collider.enabled = false;
+		}
+	}
 
 }
