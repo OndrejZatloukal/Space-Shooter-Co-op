@@ -71,8 +71,16 @@ public class PlayerController : MonoBehaviour
 		rb.rotation = Quaternion.Euler (0.0f, 0.0f, rb.velocity.x * -tilt);
 	}	
 
-	// powerup functions yeeey
+	// powerup functions
 	//---------------------------------------------------------------------------
+
+	public void StartPowerup (int index)
+	{
+		if (index == 1) 
+		{
+			StartCoroutine (Firerate ());
+		}
+	}
 
 	public IEnumerator Firerate ()
 	{
