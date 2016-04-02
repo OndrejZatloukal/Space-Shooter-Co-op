@@ -45,10 +45,18 @@ public class DestroyByContact : MonoBehaviour
 		}
 		gameController.AddScore (scoreValue);
 
-		if (other.tag != "Explosion") 
+		if (other.tag != "Explosion" && other.tag != "Shield") 
 		{
 			Destroy(other.gameObject);
 		}
+
+		if (other.CompareTag ("Shield")) 
+		{
+			other.gameObject.SetActive(false);
+			MeshCollider playerCollider = GameObject.FindWithTag("Player").GetComponent<MeshCollider> ();
+			playerCollider.enabled = true;
+		}
+
 		Destroy(gameObject);
 	}
 }

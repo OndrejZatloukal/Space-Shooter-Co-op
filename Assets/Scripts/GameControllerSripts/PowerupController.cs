@@ -13,6 +13,11 @@ public class PowerupController : MonoBehaviour
 			Destroy (gameObject);
 		}
 
+		if (other.tag == "Shield") {
+			GameObject.FindWithTag("Player").GetComponent <PlayerController> ().StartPowerup (powerupIndex);
+			Destroy (gameObject);
+		}
+
 		if (other.tag == "Player") {
 			other.GetComponent <PlayerController> ().StartPowerup (powerupIndex);
 			Destroy (gameObject);

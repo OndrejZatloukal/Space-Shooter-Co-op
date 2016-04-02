@@ -41,11 +41,18 @@ public class MissileExplosion : MonoBehaviour
 		}
 
 	//Player Explosion
-		if (other.tag == "Player")
+		if (other.CompareTag ("Shield")) 
 		{
-			Instantiate(PlayerExplosion, other.transform.position, other.transform.rotation);
+			other.gameObject.SetActive(false);
+			MeshCollider playerCollider = GameObject.FindWithTag("Player").GetComponent<MeshCollider> ();
+			playerCollider.enabled = true;
+			Destroy (gameObject);
+		}
+		else if (other.CompareTag ("Player"))
+		{
+			Instantiate (PlayerExplosion, other.transform.position, other.transform.rotation);
 			gameController.GameOver ();
-			Destroy(other.gameObject);
+			Destroy (other.gameObject);
 		}
 	}
 }
