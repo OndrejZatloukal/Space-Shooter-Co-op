@@ -18,21 +18,32 @@ public class PlayerController : MonoBehaviour
 	public Boundary boundary;
 
 	public GameObject shot;
-	public Transform shotSpawn;
+	public Transform[] shotSpawns;
 	public float fireRate;
 
 	private float nextFire;
 	private float fireRateDown;
 	private bool fireRatePower;
+	public bool fireDouble = false;
 
+	private int[] shotSpawn;
 	private GameObject shield;
 
 	void Update ()
 	{
+		// check shotspawns
+		if (fireDouble) {
+			shotSpawn = new int[]{ 1, 2 }; 
+		} else {
+			shotSpawn = new int[]{0};
+		}
+
 
 		if (Input.GetButton ("Fire1") && Time.time > nextFire) {
 			nextFire = Time.time + fireRate;
-			Instantiate (shot, shotSpawn.position, shotSpawn.rotation);
+			for (int i = 0; i < shotSpawn.Length; i++) { 
+				Instantiate (shot, shotSpawns [shotSpawn [i]].position, shotSpawns [shotSpawn [i]].rotation);
+			}
 			audioSource.Play ();
 		} 
 
