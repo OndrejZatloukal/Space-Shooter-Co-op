@@ -2,10 +2,11 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/PlayerScripts/PlayerController.cs">
     <Files>
-      <File FileName="Assets/Scripts/PlayerScripts/PlayerController.cs" Line="42" Column="3" />
-      <File FileName="Assets/Scripts/EnemyScripts/EvasiveManouverMissile.cs" Line="49" Column="2" />
+      <File FileName="Assets/Scripts/PlayerScripts/PlayerController.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameControllerSripts/PowerupController.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/EnemyScripts/EvasiveManouverMissile.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/MissileExplosion.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameControllerSripts/GameController.cs" Line="43" Column="4" />
+      <File FileName="Assets/Scripts/GameControllerSripts/GameController.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
