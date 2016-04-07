@@ -24,21 +24,34 @@ public class PlayerController : MonoBehaviour
 	private float nextFire;
 	private float fireRateDown;
 	private bool fireRatePower;
-	public bool fireDouble = false;
+	private float fireDoubleDown;
+	private bool fireDouble = false;
+	public bool startShield = false;
 
 	private int[] shotSpawn;
 	private GameObject shield;
 
-	void Update ()
+	void Start ()
 	{
-		// check shotspawns
-		if (fireDouble) {
-			shotSpawn = new int[]{ 1, 2 }; 
-		} else {
-			shotSpawn = new int[]{0};
+		rb = GetComponent<Rigidbody>();
+		audioSource = GetComponent<AudioSource>();
+		collider = GetComponent<MeshCollider>();
+		fireRatePower = false;
+		shield = GameObject.FindWithTag("Shield");
+		shotSpawn = new int[]{0};
+
+		if (!startShield) 
+		{
+			shield.SetActive (false);
+		} else 
+		{
+			collider.enabled = false;
 		}
 
+	}
 
+	void Update ()
+	{
 		if (Input.GetButton ("Fire1") && Time.time > nextFire) {
 			nextFire = Time.time + fireRate;
 			for (int i = 0; i < shotSpawn.Length; i++) { 
@@ -59,22 +72,13 @@ public class PlayerController : MonoBehaviour
 			Debug.Log("o key was pressed");
 		}
 
-	}
-
-	void Start ()
-	{
-		rb = GetComponent<Rigidbody>();
-		audioSource = GetComponent<AudioSource>();
-		collider = GetComponent<MeshCollider>();
-		fireRatePower = false;
-		shield = GameObject.FindWithTag("Shield");
-		//shield.SetActive (false);
-		if (shield.activeSelf)
+		if (Input.GetKeyDown (KeyCode.I)) 
 		{
-			collider.enabled = false;
+			StartCoroutine (FireDouble ());
+			Debug.Log("i key was pressed");
 		}
+
 	}
-		
 
 	// player movement 
 	void FixedUpdate ()
@@ -106,6 +110,8 @@ public class PlayerController : MonoBehaviour
 			StartCoroutine (Firerate ());
 		} else if (index == 2) {
 			Shield ();
+		} else if (index == 3) {
+			StartCoroutine (FireDouble());
 		}
 	}
 
@@ -131,5 +137,19 @@ public class PlayerController : MonoBehaviour
 			collider.enabled = false;
 		}
 	}
+
+	public IEnumerator FireDouble ()
+	{ 
+		fireDoubleDown = Time.time + 5;
+		if (shotSpawn.Length < 2)
+		{
+			//fireDouble = true;
+			shotSpawn = new int[]{ 1, 2 };
+			yield return new WaitWhile (() => fireDoubleDown > Time.time);
+			//fireDouble = false;
+			shotSpawn = new int[]{0};
+		}
+	}
+
 
 }
