@@ -23,9 +23,10 @@ public class PlayerController : MonoBehaviour
 
 	private float nextFire;
 	private float fireRateDown;
+	private float speedDown;
 	private bool fireRatePower;
+	private bool speedUpPower;
 	private float fireDoubleDown;
-	private bool fireDouble = false;
 	public bool startShield = false;
 
 	private int[] shotSpawn;
@@ -78,6 +79,12 @@ public class PlayerController : MonoBehaviour
 			Debug.Log("i key was pressed");
 		}
 
+		if (Input.GetKeyDown (KeyCode.U)) 
+		{
+			StartCoroutine (SpeedPower ());
+			Debug.Log("u key was pressed");
+		}
+
 	}
 
 	// player movement 
@@ -112,6 +119,8 @@ public class PlayerController : MonoBehaviour
 			Shield ();
 		} else if (index == 3) {
 			StartCoroutine (FireDouble());
+		} else if (index == 4) {
+			StartCoroutine (SpeedPower());
 		}
 	}
 
@@ -148,6 +157,19 @@ public class PlayerController : MonoBehaviour
 			yield return new WaitWhile (() => fireDoubleDown > Time.time);
 			//fireDouble = false;
 			shotSpawn = new int[]{0};
+		}
+	}
+
+	public IEnumerator SpeedPower ()
+	{
+		speedDown = Time.time + 5;
+		if (speedUpPower == false)
+		{
+			speedUpPower = true;
+			speed = speed * 1.5f;
+			yield return new WaitWhile (() => speedDown > Time.time);
+			speed = speed / 1.5f;
+			speedUpPower = false;
 		}
 	}
 
