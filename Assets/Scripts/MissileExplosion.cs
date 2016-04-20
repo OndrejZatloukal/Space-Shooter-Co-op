@@ -6,10 +6,11 @@ public class MissileExplosion : MonoBehaviour
 	public GameObject explosion;
 	public GameObject PlayerExplosion;
 	public float smoothing;
+	[HideInInspector]
 	public float blastRadius;
 
 	private GameController gameController;
-	private SphereCollider collider;
+	private new SphereCollider collider;
 
 	void Start ()
 	{
