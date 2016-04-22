@@ -26,6 +26,7 @@ public class GameController : MonoBehaviour
 	//Asteroid spawning
 	void Start ()
 	{
+		SceneManager.LoadScene ("Secondary", mode: LoadSceneMode.Additive);
 		gameOver = false;
 		restart = false;
 		restartText.text = "";

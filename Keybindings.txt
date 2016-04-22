@@ -1,0 +1,21 @@
+Main
+
+	Move: Arrow keys, WASD or controller left analog stick
+	Fire 1: Spacebar, left Ctrl or controller A
+
+	Debugging
+	Powerup Firerate: P
+	Powerup Shield: O
+	Powerup FireDouble: I
+	Powerup Speed: U
+
+Secondary
+
+	Click with mouse 0 on object you want to swap, then click on object you want to swap it with
+
+	Debugging
+	Spawn Powerups: X
+	Print powerups in column 0: Z
+	Check for matches: C
+	Delete Matches: V
+	Start Check Cycle: B
