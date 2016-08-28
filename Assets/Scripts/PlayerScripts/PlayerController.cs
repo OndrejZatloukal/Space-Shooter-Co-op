@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
 
 	public float speed;
 	public float tilt;
+	public float powerupTime;
 	public Boundary boundary;
 
 	public GameObject shot;
@@ -130,7 +131,7 @@ public class PlayerController : MonoBehaviour
 
 	public IEnumerator Firerate ()
 	{
-		fireRateDown = Time.time + 5;
+		fireRateDown = Time.time + powerupTime;
 		if (fireRatePower == false)
 		{
 			fireRatePower = true;
@@ -153,7 +154,7 @@ public class PlayerController : MonoBehaviour
 
 	public IEnumerator FireDouble ()
 	{ 
-		fireDoubleDown = Time.time + 5;
+		fireDoubleDown = Time.time + powerupTime;
 		if (shotSpawn.Length < 2)
 		{
 			//fireDouble = true;
@@ -166,7 +167,7 @@ public class PlayerController : MonoBehaviour
 
 	public IEnumerator SpeedPower ()
 	{
-		speedDown = Time.time + 5;
+		speedDown = Time.time + powerupTime;
 		if (speedUpPower == false)
 		{
 			speedUpPower = true;
