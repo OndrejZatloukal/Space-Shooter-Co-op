@@ -52,10 +52,8 @@ public class DestroyByContact : MonoBehaviour
 
 		if (other.CompareTag ("Shield")) 
 		{
-			other.gameObject.SetActive(false);
-			MeshCollider playerCollider = GameObject.FindWithTag("Player").GetComponent<MeshCollider> ();
-			playerCollider.enabled = true;
-		}
+            other.GetComponentInParent<PlayerController>().ShieldDown();
+        }
 
 		Destroy(gameObject);
 	}

@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// adds class boundary to set the bounds in which the player can move around
+// data members can be set in Unity editor
 	[System.Serializable]
 public class Boundary
 {
@@ -9,6 +11,8 @@ public class Boundary
 
 public class PlayerController : MonoBehaviour 
 {
+    private PowerupUI powerupUI;
+
 	private Rigidbody rb;
 	private AudioSource audioSource;
 	private new MeshCollider collider;
@@ -37,11 +41,24 @@ public class PlayerController : MonoBehaviour
 
 	void Start ()
 	{
-		rb = GetComponent<Rigidbody>();
+        // Find the Game Controller
+        GameObject gameControllerObject = GameObject.FindWithTag("GameController");
+        if (gameControllerObject != null)
+        {
+            powerupUI = gameControllerObject.GetComponent<PowerupUI>();
+        }
+        if (powerupUI == null)
+        {
+            Debug.Log("Cannot find 'PowerupUI' Script");
+        }
+
+        // get objects
+        rb = GetComponent<Rigidbody>();
 		audioSource = GetComponent<AudioSource>();
 		collider = GetComponent<MeshCollider>();
 //		camera  = GameObject.FindWithTag("MainCamera").GetComponent <Camera> ();
 
+        // set up power up data
 		fireRatePower = false;
 		shield = GameObject.FindWithTag("Shield");
 //		turret = GameObject.FindWithTag("Turret");
@@ -67,32 +84,36 @@ public class PlayerController : MonoBehaviour
 			audioSource.Play ();
 		} 
 
+        // Debug: Active Powerup Firerate
 		if (Input.GetKeyDown (KeyCode.P)) 
 		{
 			StartCoroutine (Firerate ());
 			Debug.Log("p key was pressed");
 		}
 
-		if (Input.GetKeyDown (KeyCode.O)) 
+        // Debug: Active Powerup Shield
+        if (Input.GetKeyDown (KeyCode.O)) 
 		{
 			Shield ();
 			Debug.Log("o key was pressed");
 		}
 
-		if (Input.GetKeyDown (KeyCode.I)) 
+        // Debug: Active Powerup Fire Double
+        if (Input.GetKeyDown (KeyCode.I)) 
 		{
 			StartCoroutine (FireDouble ());
 			Debug.Log("i key was pressed");
 		}
 
-		if (Input.GetKeyDown (KeyCode.U)) 
+        // Debug: Active Powerup Speed
+        if (Input.GetKeyDown (KeyCode.U)) 
 		{
 			StartCoroutine (SpeedPower ());
 			Debug.Log("u key was pressed");
 		}
 	}
 
-	// player movement 
+	// Player Movement 
 	void FixedUpdate ()
 	{
 		float moveHorizontal = Input.GetAxis ("Horizontal");
@@ -134,12 +155,19 @@ public class PlayerController : MonoBehaviour
 		fireRateDown = Time.time + powerupTime;
 		if (fireRatePower == false)
 		{
+            // power up
 			fireRatePower = true;
 			fireRate = fireRate / 2;
-			yield return new WaitWhile (() => fireRateDown > Time.time);
-			fireRate = fireRate * 2;
-			fireRatePower = false;
-		}
+            powerupUI.Active(1);
+
+            // wait for timer to run out
+            yield return new WaitWhile (() => fireRateDown > Time.time);
+
+            // power down
+            fireRate = fireRate * 2;
+            fireRatePower = false;
+            powerupUI.Deactive(1);
+        }
 	}
 
 	public void Shield ()
@@ -147,22 +175,39 @@ public class PlayerController : MonoBehaviour
 		if (shield.activeSelf) {
 			return;
 		} else {
-			shield.SetActive(true);
+            // power up
+            shield.SetActive(true);
 			collider.enabled = false;
-		}
+            powerupUI.Active(2);
+        }
 	}
+
+    public void ShieldDown()
+    {
+        // power down
+        shield.SetActive(false);
+        collider.enabled = true;
+        powerupUI.Deactive(2);
+    } // end function ShieldDown
 
 	public IEnumerator FireDouble ()
 	{ 
 		fireDoubleDown = Time.time + powerupTime;
 		if (shotSpawn.Length < 2)
 		{
-			//fireDouble = true;
-			shotSpawn = new int[]{ 1, 2 };
-			yield return new WaitWhile (() => fireDoubleDown > Time.time);
-			//fireDouble = false;
-			shotSpawn = new int[]{0};
-		}
+            // power up
+            //fireDouble = true;
+            shotSpawn = new int[]{ 1, 2 };
+            powerupUI.Active(3);
+
+            // wait for timer to run out
+            yield return new WaitWhile (() => fireDoubleDown > Time.time);
+
+            // power down
+            shotSpawn = new int[] { 0 };
+            //fireDouble = false;
+            powerupUI.Deactive(3);
+        }
 	}
 
 	public IEnumerator SpeedPower ()
@@ -170,12 +215,19 @@ public class PlayerController : MonoBehaviour
 		speedDown = Time.time + powerupTime;
 		if (speedUpPower == false)
 		{
-			speedUpPower = true;
+            // power up
+            speedUpPower = true;
 			speed = speed * 1.5f;
-			yield return new WaitWhile (() => speedDown > Time.time);
-			speed = speed / 1.5f;
+            powerupUI.Active(4);
+
+            // wait for timer to run out
+            yield return new WaitWhile (() => speedDown > Time.time);
+
+            // power down
+            speed = speed / 1.5f;
 			speedUpPower = false;
-		}
+            powerupUI.Deactive(4);
+        }
 	}
 
 

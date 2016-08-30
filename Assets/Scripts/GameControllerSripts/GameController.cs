@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour
 	public int hazardCountInc;
 	public float hazardType;
 	public float hazardIncrease;
+
 	public Vector3 spawnValues;
 	public float spawnWait;
 	public float startWait;
@@ -23,10 +24,13 @@ public class GameController : MonoBehaviour
 	private bool restart;
 	private int score;
 	private int wave;
-	//Asteroid spawning
+
 	void Start ()
 	{
+        // load secondary game into scene
 		SceneManager.LoadScene ("Secondary", mode: LoadSceneMode.Additive);
+
+        // initialize variables and GUI texts
 		gameOver = false;
 		restart = false;
 		restartText.text = "";
@@ -35,6 +39,8 @@ public class GameController : MonoBehaviour
 		wave = 0;
 		UpdateScore ();
 		UpdateWave ();
+
+        // start spawning hazards
 		StartCoroutine (SpawnWaves ());
 	}
 
@@ -51,12 +57,13 @@ public class GameController : MonoBehaviour
 
 	IEnumerator SpawnWaves ()
 	{
-		//Spawn Asteroid in wide range 
 		yield return new WaitForSeconds (startWait);
 		while (true)
 		{
 			wave += 1;
-			UpdateWave ();
+			UpdateWave (); // update wave number in GUI text
+
+            // spawn the appropriate amount of hazards for this wave
 			for (int i = 0; i < hazardCount; i++) 
 			{
 				GameObject hazard = hazards[Random.Range (0, Mathf.FloorToInt (hazardType + .00001f))];
@@ -65,8 +72,10 @@ public class GameController : MonoBehaviour
 				Instantiate (hazard, spawnPosition, spawnRotation);
 				yield return new WaitForSeconds (spawnWait);
 			}
+
 			yield return new WaitForSeconds (waveWait);
 
+            // increase the amount and types of hazards for next wave
 			hazardCount += hazardCountInc;
 			hazardType = Mathf.Min (hazardType + (1 / hazardIncrease), hazards.Length);
 
@@ -79,13 +88,11 @@ public class GameController : MonoBehaviour
 		}
 	}
 
-	//Score 
-
 	public void AddScore (int newScoreValue)
 	{
 		score += newScoreValue;
-		UpdateScore ();
-	}
+		UpdateScore (); // update score in GUI text
+    }
 		
 	void UpdateScore ()
 	{
