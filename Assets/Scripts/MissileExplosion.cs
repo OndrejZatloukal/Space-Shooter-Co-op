@@ -42,12 +42,10 @@ public class MissileExplosion : MonoBehaviour
 		}
 
 	//Player Explosion
-		if (other.CompareTag ("Shield")) 
-		{
-			other.gameObject.SetActive(false);
-			MeshCollider playerCollider = GameObject.FindWithTag("Player").GetComponent<MeshCollider> ();
-			playerCollider.enabled = true;
-			Destroy (gameObject);
+		if (other.CompareTag ("Shield"))
+        {
+            other.GetComponentInParent<PlayerController>().ShieldDown();
+            Destroy (gameObject);
 		}
 		else if (other.CompareTag ("Player"))
 		{

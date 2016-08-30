@@ -34,8 +34,9 @@ public class SecondaryController : MonoBehaviour {
 	private List<int> Selected = new List<int>();
 	private GameObject Swap;
 
+    private PlayerController player;
 
-	private new Camera camera;
+    private new Camera camera;
 	private bool initializing = true;
 	private bool mouseActive = false;
 	private Vector3 mouseVector;
@@ -44,24 +45,44 @@ public class SecondaryController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        // Set spawn point for match objects
 		ySpawn = gridY + 1;
 
 		camera  = GameObject.FindWithTag("SecondaryCamera").GetComponent <Camera> ();
 
-		scoreRed = 0;
+        // Try to find the player
+        try
+        {
+            player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+        }
+        catch (System.NullReferenceException)
+        {
+            player = null;
+        }
+
+        // Initialize score and score text
+        scoreRed = 0;
 		scoreBlue = 0;
 		scoreYellow = 0;
 		scoreGreen = 0;
 
-		redScore.text = "Red Score: " + scoreRed + " / " + targetRed;
-		blueScore.text = "Blue Score: " + scoreBlue + " / " + targetBlue;
-		yellowScore.text = "Yellow Score: " + scoreYellow + " / " + targetYellow;
-		greenScore.text = "Green Score: " + scoreGreen + " / " + targetGreen;
+		//redScore.text = "Red Score: " + scoreRed + " / " + targetRed;
+		//blueScore.text = "Blue Score: " + scoreBlue + " / " + targetBlue;
+		//yellowScore.text = "Yellow Score: " + scoreYellow + " / " + targetYellow;
+		//greenScore.text = "Green Score: " + scoreGreen + " / " + targetGreen;
 
-		for (int i = 0; i < grid.Length; i++)
+        redScore.text = "Fire Rate: " + scoreRed + " / " + targetRed;
+        blueScore.text = "Shield Up: " + scoreBlue + " / " + targetBlue;
+        yellowScore.text = "Double Fire: " + scoreYellow + " / " + targetYellow;
+        greenScore.text = "Speed Up: " + scoreGreen + " / " + targetGreen;
+
+        // Create 2D grid
+        for (int i = 0; i < grid.Length; i++)
 		{
 			grid[i] = new GameObject[gridY];
 		}
+
+        // Fill empty grid with match objects
 		StartCoroutine (InitSpawnPowerups ());
 	} // end function start
 	
@@ -389,13 +410,15 @@ public class SecondaryController : MonoBehaviour {
 	{
 		if (!(initializing))
 		{
+
 			if (tag == "PowerupFireRate")
 			{
 				scoreRed += 10 * (count -2);
 
-				if (scoreRed >= targetRed)
+				if (scoreRed >= targetRed && player != null)
 				{
-					GameObject.FindWithTag("Player").GetComponent <PlayerController> ().StartPowerup (1);
+                    //GameObject.FindWithTag("Player").GetComponent <PlayerController> ().StartPowerup (1);
+                    player.StartPowerup(1);
 					scoreRed -= targetRed;
 				}
 
@@ -405,9 +428,10 @@ public class SecondaryController : MonoBehaviour {
 			{
 				scoreBlue += 10 * (count -2);
 
-				if (scoreBlue >= targetBlue)
+				if (scoreBlue >= targetBlue && player != null)
 				{
-					GameObject.FindWithTag("Player").GetComponent <PlayerController> ().StartPowerup (2);
+                    //GameObject.FindWithTag("Player").GetComponent <PlayerController> ().StartPowerup (2);
+                    player.StartPowerup(2);
 					scoreBlue -= targetBlue;
 				}
 
@@ -417,9 +441,10 @@ public class SecondaryController : MonoBehaviour {
 			{
 				scoreYellow += 10 * (count -2);
 
-				if (scoreYellow >= targetYellow)
+				if (scoreYellow >= targetYellow && player != null)
 				{
-					GameObject.FindWithTag("Player").GetComponent <PlayerController> ().StartPowerup (3);
+                    //GameObject.FindWithTag("Player").GetComponent <PlayerController> ().StartPowerup (3);
+                    player.StartPowerup(3);
 					scoreYellow -= targetYellow;
 				}
 
@@ -429,9 +454,10 @@ public class SecondaryController : MonoBehaviour {
 			{
 				scoreGreen += 10 * (count -2);
 
-				if (scoreGreen >= targetGreen)
+				if (scoreGreen >= targetGreen && player != null)
 				{
-					GameObject.FindWithTag("Player").GetComponent <PlayerController> ().StartPowerup (4);
+                    //GameObject.FindWithTag("Player").GetComponent <PlayerController> ().StartPowerup (4);
+                    player.StartPowerup(4);
 					scoreGreen -= targetGreen;
 				}
 
