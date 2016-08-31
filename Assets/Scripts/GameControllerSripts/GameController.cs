@@ -25,11 +25,14 @@ public class GameController : MonoBehaviour
 	private int score;
 	private int wave;
 
+    void Awake()
+    {
+        // load secondary game into scene
+        SceneManager.LoadScene("Secondary", mode: LoadSceneMode.Additive);
+    }
+
 	void Start ()
 	{
-        // load secondary game into scene
-		SceneManager.LoadScene ("Secondary", mode: LoadSceneMode.Additive);
-
         // initialize variables and GUI texts
 		gameOver = false;
 		restart = false;
@@ -48,7 +51,7 @@ public class GameController : MonoBehaviour
 	{
 		if (restart) 
 		{
-			if (Input.GetKeyDown (KeyCode.R)) 
+			if (Input.GetKeyDown (KeyCode.R) || Input.GetKeyDown(KeyCode.JoystickButton7) )
 			{
 				SceneManager.LoadScene (SceneManager.GetActiveScene().name);
 			}

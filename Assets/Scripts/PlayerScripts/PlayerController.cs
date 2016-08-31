@@ -12,11 +12,12 @@ public class Boundary
 public class PlayerController : MonoBehaviour 
 {
     private PowerupUI powerupUI;
+    private SecondaryController secondaryController;
 
 	private Rigidbody rb;
 	private AudioSource audioSource;
 	private new MeshCollider collider;
-//	private new Camera camera;
+	private new Camera camera;
 
 	public float speed;
 	public float tilt;
@@ -35,11 +36,20 @@ public class PlayerController : MonoBehaviour
 	private float fireDoubleDown;
 	public bool startShield = false;
 
+    // variables for turret
+    private bool turretActive = false;
+    private float turretDown;
+    private float turretFireRate;
+    private float nextTurretFire;
+
 	private int[] shotSpawn;
 	private GameObject shield;
-//	private GameObject turret;
+	private GameObject turret;
+    public Transform turretShotSpawn;
 
-	void Start ()
+    private Vector3 mouseVector;
+
+    void Start ()
 	{
         // Find the Game Controller
         GameObject gameControllerObject = GameObject.FindWithTag("GameController");
@@ -52,19 +62,31 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Cannot find 'PowerupUI' Script");
         }
 
+        // Find the Secondary Controller
+        GameObject secondaryControllerObject = GameObject.FindWithTag("SecondaryController");
+        if (secondaryControllerObject != null)
+        {
+            secondaryController = secondaryControllerObject.GetComponent<SecondaryController>();
+        }
+        if (secondaryController == null)
+        {
+            Debug.Log("Cannot find 'SecondaryController' Script");
+        }
+
         // get objects
         rb = GetComponent<Rigidbody>();
 		audioSource = GetComponent<AudioSource>();
 		collider = GetComponent<MeshCollider>();
-//		camera  = GameObject.FindWithTag("MainCamera").GetComponent <Camera> ();
+		camera  = GameObject.FindWithTag("MainCamera").GetComponent <Camera>();
 
         // set up power up data
 		fireRatePower = false;
 		shield = GameObject.FindWithTag("Shield");
-//		turret = GameObject.FindWithTag("Turret");
 		shotSpawn = new int[]{0};
+        turretFireRate = fireRate;
+        turret = GameObject.FindWithTag("Turret");
 
-		if (!startShield) 
+        if (!startShield) 
 		{
 			shield.SetActive (false);
 		} else 
@@ -76,9 +98,11 @@ public class PlayerController : MonoBehaviour
 
 	void Update ()
 	{
-		if (Input.GetButton ("Fire1") && Time.time > nextFire) {
+		if (Input.GetButton ("Fire1") && Time.time > nextFire)
+        {
 			nextFire = Time.time + fireRate;
-			for (int i = 0; i < shotSpawn.Length; i++) { 
+			for (int i = 0; i < shotSpawn.Length; i++)
+            { 
 				Instantiate (shot, shotSpawns [shotSpawn [i]].position, shotSpawns [shotSpawn [i]].rotation);
 			}
 			audioSource.Play ();
@@ -110,8 +134,15 @@ public class PlayerController : MonoBehaviour
 		{
 			StartCoroutine (SpeedPower ());
 			Debug.Log("u key was pressed");
-		}
-	}
+        }
+
+        // Debug: Active Turret
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            StartCoroutine(Turret());
+            Debug.Log("y key was pressed");
+        }
+    }
 
 	// Player Movement 
 	void FixedUpdate ()
@@ -122,7 +153,7 @@ public class PlayerController : MonoBehaviour
 		Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
 		rb.velocity = movement * speed;
 
-	//defines range of players movement
+	    //defines range of players movement
 		rb.position = new Vector3
 		(
 			Mathf.Clamp (rb.position.x, boundary.xMin, boundary.xMax),
@@ -130,25 +161,60 @@ public class PlayerController : MonoBehaviour
 			Mathf.Clamp (rb.position.z, boundary.zMin, boundary.zMax)
 		);
 
-	//ship rotation
+	    //ship rotation
 		rb.rotation = Quaternion.Euler (0.0f, 0.0f, rb.velocity.x * -tilt);
-	}	
+
+        // if turret powerup active
+        if (turretActive)
+        {
+            //turret rotation
+            mouseVector = camera.ScreenToWorldPoint(Input.mousePosition);
+
+            Vector3 relative = mouseVector - turret.transform.position;
+
+            turret.transform.rotation = Quaternion.Euler(
+                0.0f,
+                Mathf.Atan2(relative.x, relative.z) * Mathf.Rad2Deg,
+                180.0f
+                );
+
+            //shoot turret
+            if (Input.GetMouseButton(0) && Time.time > nextTurretFire)
+            {
+                nextTurretFire = Time.time + turretFireRate;
+                Instantiate(shot, turretShotSpawn.position, turretShotSpawn.rotation);
+
+                audioSource.Play();
+            }
+        }
+    }	
 
 	// powerup functions
 	//---------------------------------------------------------------------------
 
 	public void StartPowerup (int index)
 	{
-		if (index == 1) {
+		if (index == 1)
+        {
 			StartCoroutine (Firerate ());
-		} else if (index == 2) {
-			Shield ();
-		} else if (index == 3) {
-			StartCoroutine (FireDouble());
-		} else if (index == 4) {
-			StartCoroutine (SpeedPower());
 		}
-	}
+        else if (index == 2)
+        {
+			Shield ();
+		}
+        else if (index == 3)
+        {
+			StartCoroutine (FireDouble());
+		}
+        else if (index == 4)
+        {
+			StartCoroutine (SpeedPower());
+        }
+        else if (index == 5)
+        {
+            StartCoroutine(Turret());
+        }
+    }
 
 	public IEnumerator Firerate ()
 	{
@@ -230,5 +296,24 @@ public class PlayerController : MonoBehaviour
         }
 	}
 
+    public IEnumerator Turret()
+    {
+        turretDown = Time.time + powerupTime * 2;
+        if (turretActive == false)
+        {
+            // power up
+            secondaryController.DeactivateMouse();
+            turretActive = true;
+            powerupUI.Active(5);
 
+            // wait for timer to run out
+            yield return new WaitWhile(() => turretDown > Time.time);
+
+            // power down
+            turretActive = false;
+            secondaryController.ReactivateMouse();
+            turret.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
+            powerupUI.Deactive(5);
+        }
+    }
 }

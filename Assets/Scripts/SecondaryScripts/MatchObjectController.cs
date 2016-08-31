@@ -11,14 +11,14 @@ public class MatchObjectController : MonoBehaviour {
 	[HideInInspector]
 	public bool swap;
 
-	private Transform cubeTransform;
+	//private Transform cubeTransform;
 	private int gridY;
 	private float zOffset;
 
 	void Start ()
 	{
 		swap = false;
-		cubeTransform = GetComponentsInChildren<Transform> ()[1];
+		//cubeTransform = GetComponentsInChildren<Transform> ()[1];
 		gridY = GameObject.FindWithTag("SecondaryController").GetComponent <SecondaryController> ().ySpawn;
 		zOffset = GameObject.FindWithTag("SecondaryController").GetComponent <SecondaryController> ().zOffset;
 	}
@@ -26,7 +26,7 @@ public class MatchObjectController : MonoBehaviour {
 	void FixedUpdate ()
 	{
 		// Rotator
-		cubeTransform.Rotate (new Vector3 (15, 30, 45) * Time.deltaTime);
+		//cubeTransform.Rotate (new Vector3 (15, 30, 45) * Time.deltaTime);
 
 		// Fall into position
 		if (!(transform.position.y == yPos || swap))

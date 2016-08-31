@@ -15,19 +15,22 @@ public class SecondaryController : MonoBehaviour {
 	public GUIText blueScore;
 	public GUIText yellowScore;
 	public GUIText greenScore;
+    public GUIText whiteScore;
 
-	private int scoreRed;
+    private int scoreRed;
 	private int scoreBlue;
 	private int scoreYellow;
 	private int scoreGreen;
+    private int scoreWhite;
 
-	public float zOffset;
+    public float zOffset;
 	public GameObject[] powerups;
 
 	public int targetRed;
 	public int targetBlue;
 	public int targetYellow;
 	public int targetGreen;
+	public int targetWhite;
 
 	private GameObject[][] grid = new GameObject[gridX][];
 	private List<GameObject> Match = new List<GameObject>();
@@ -38,10 +41,14 @@ public class SecondaryController : MonoBehaviour {
 
     private new Camera camera;
 	private bool initializing = true;
-	private bool mouseActive = false;
+
+    private bool mouseDeactive = false;
+    private bool mouseActive = false;
 	private Vector3 mouseVector;
 	private int mousePositionX;
 	private int mousePositionY;
+
+    public GameObject banner;
 
 	// Use this for initialization
 	void Start () {
@@ -65,16 +72,20 @@ public class SecondaryController : MonoBehaviour {
 		scoreBlue = 0;
 		scoreYellow = 0;
 		scoreGreen = 0;
+        scoreWhite = 0;
 
-		//redScore.text = "Red Score: " + scoreRed + " / " + targetRed;
-		//blueScore.text = "Blue Score: " + scoreBlue + " / " + targetBlue;
-		//yellowScore.text = "Yellow Score: " + scoreYellow + " / " + targetYellow;
-		//greenScore.text = "Green Score: " + scoreGreen + " / " + targetGreen;
+        banner.SetActive(false);
+
+        //redScore.text = "Red Score: " + scoreRed + " / " + targetRed;
+        //blueScore.text = "Blue Score: " + scoreBlue + " / " + targetBlue;
+        //yellowScore.text = "Yellow Score: " + scoreYellow + " / " + targetYellow;
+        //greenScore.text = "Green Score: " + scoreGreen + " / " + targetGreen;
 
         redScore.text = "Fire Rate: " + scoreRed + " / " + targetRed;
         blueScore.text = "Shield Up: " + scoreBlue + " / " + targetBlue;
         yellowScore.text = "Double Fire: " + scoreYellow + " / " + targetYellow;
         greenScore.text = "Speed Up: " + scoreGreen + " / " + targetGreen;
+        whiteScore.text = "Turret On: " + scoreWhite + " / " + targetWhite;
 
         // Create 2D grid
         for (int i = 0; i < grid.Length; i++)
@@ -375,7 +386,7 @@ public class SecondaryController : MonoBehaviour {
 	IEnumerator checkCycle ()
 	{
 		bool run = true;
-		yield return new WaitForSeconds (0.2f);
+        yield return new WaitForSeconds (0.2f);
 		while (run)
 		{
 			yield return new WaitForSeconds (0.05f);
@@ -385,10 +396,13 @@ public class SecondaryController : MonoBehaviour {
 			yield return new WaitForSeconds (0.05f);
 			Debug.Log("Finsihed checkCycle");
 			run = checkMatch();
-		}
+        }
 
-		mouseActive = true;
-	} // end co-routine checkCycle
+        if (!mouseDeactive)
+        {
+            mouseActive = true;
+        }
+    } // end co-routine checkCycle
 
 	IEnumerator revertSwap(int x, int y, int mousePositionX, int mousePositionY, GameObject Swap)
 	{
@@ -403,7 +417,10 @@ public class SecondaryController : MonoBehaviour {
 		grid[mousePositionX][mousePositionY].GetComponent<MatchObjectController> ().yPos = mousePositionY;
 		grid[mousePositionX][mousePositionY].GetComponent<MatchObjectController> ().swap = true;
 
-		mouseActive = true;
+        if (!mouseDeactive)
+        {
+            mouseActive = true;
+        }
 	} // end co-routine revertSwap
 
 	void addScore(string tag, int count)
@@ -422,7 +439,7 @@ public class SecondaryController : MonoBehaviour {
 					scoreRed -= targetRed;
 				}
 
-				redScore.text = "Red Score: " + scoreRed + " / " + targetRed;
+				redScore.text = "Fire Rate: " + scoreRed + " / " + targetRed;
 			}
 			else if (tag == "PowerupShield")
 			{
@@ -435,7 +452,7 @@ public class SecondaryController : MonoBehaviour {
 					scoreBlue -= targetBlue;
 				}
 
-				blueScore.text = "Blue Score: " + scoreBlue + " / " + targetBlue;
+				blueScore.text = "Shield Up: " + scoreBlue + " / " + targetBlue;
 			}
 			else if (tag == "PowerupFireDouble")
 			{
@@ -448,7 +465,7 @@ public class SecondaryController : MonoBehaviour {
 					scoreYellow -= targetYellow;
 				}
 
-				yellowScore.text = "Yellow Score: " + scoreYellow + " / " + targetYellow;
+				yellowScore.text = "Double Fire: " + scoreYellow + " / " + targetYellow;
 			}
 			else if (tag == "PowerupSpeed")
 			{
@@ -461,8 +478,36 @@ public class SecondaryController : MonoBehaviour {
 					scoreGreen -= targetGreen;
 				}
 
-				greenScore.text = "Green Score: " + scoreGreen + " / " + targetGreen;
+				greenScore.text = "Speed Up: " + scoreGreen + " / " + targetGreen;
 			}
+
+            // count total score in white
+            scoreWhite += 10 * (count - 2);
+
+            if (scoreWhite >= targetWhite && player != null)
+            {
+                player.StartPowerup(5);
+                //scoreWhite -= targetWhite;
+                targetWhite = Mathf.FloorToInt(targetWhite * 2.2f);
+            }
+
+            whiteScore.text = "Turret On: " + scoreWhite + " / " + targetWhite;
 		}
 	} // end function addScore
+
+    public void DeactivateMouse()
+    {
+        mouseDeactive = true;
+        mouseActive = false;
+
+        banner.SetActive(true);
+    }
+
+    public void ReactivateMouse()
+    {
+        mouseDeactive = false;
+        mouseActive = true;
+
+        banner.SetActive(false);
+    }
 } // end class SecondaryController
