@@ -15,8 +15,9 @@ public class PlayerController : MonoBehaviour
     private SecondaryController secondaryController;
 
 	private Rigidbody rb;
-	private AudioSource audioSource;
-	private new MeshCollider collider;
+	public AudioSource shotPlayer;
+    public AudioSource shotTurret;
+    private new MeshCollider collider;
 	private new Camera camera;
 
 	public float speed;
@@ -25,7 +26,8 @@ public class PlayerController : MonoBehaviour
 	public Boundary boundary;
 
 	public GameObject shot;
-	public Transform[] shotSpawns;
+    public GameObject turretShot;
+    public Transform[] shotSpawns;
 	public float fireRate;
 
 	private float nextFire;
@@ -75,7 +77,7 @@ public class PlayerController : MonoBehaviour
 
         // get objects
         rb = GetComponent<Rigidbody>();
-		audioSource = GetComponent<AudioSource>();
+		//audioSource = GetComponent<AudioSource>();
 		collider = GetComponent<MeshCollider>();
 		camera  = GameObject.FindWithTag("MainCamera").GetComponent <Camera>();
 
@@ -105,7 +107,7 @@ public class PlayerController : MonoBehaviour
             { 
 				Instantiate (shot, shotSpawns [shotSpawn [i]].position, shotSpawns [shotSpawn [i]].rotation);
 			}
-			audioSource.Play ();
+            shotPlayer.Play ();
 		} 
 
         // Debug: Active Powerup Firerate
@@ -182,9 +184,9 @@ public class PlayerController : MonoBehaviour
             if (Input.GetMouseButton(0) && Time.time > nextTurretFire)
             {
                 nextTurretFire = Time.time + turretFireRate;
-                Instantiate(shot, turretShotSpawn.position, turretShotSpawn.rotation);
+                Instantiate(turretShot, turretShotSpawn.position, turretShotSpawn.rotation);
 
-                audioSource.Play();
+                shotTurret.Play();
             }
         }
     }	

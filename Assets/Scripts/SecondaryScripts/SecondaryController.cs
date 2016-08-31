@@ -30,7 +30,8 @@ public class SecondaryController : MonoBehaviour {
 	public int targetBlue;
 	public int targetYellow;
 	public int targetGreen;
-	public int targetWhite;
+    public int baseTargetWhite;
+    public int targetWhite;
 
 	private GameObject[][] grid = new GameObject[gridX][];
 	private List<GameObject> Match = new List<GameObject>();
@@ -73,13 +74,9 @@ public class SecondaryController : MonoBehaviour {
 		scoreYellow = 0;
 		scoreGreen = 0;
         scoreWhite = 0;
+        baseTargetWhite = targetWhite;
 
         banner.SetActive(false);
-
-        //redScore.text = "Red Score: " + scoreRed + " / " + targetRed;
-        //blueScore.text = "Blue Score: " + scoreBlue + " / " + targetBlue;
-        //yellowScore.text = "Yellow Score: " + scoreYellow + " / " + targetYellow;
-        //greenScore.text = "Green Score: " + scoreGreen + " / " + targetGreen;
 
         redScore.text = "Fire Rate: " + scoreRed + " / " + targetRed;
         blueScore.text = "Shield Up: " + scoreBlue + " / " + targetBlue;
@@ -434,7 +431,6 @@ public class SecondaryController : MonoBehaviour {
 
 				if (scoreRed >= targetRed && player != null)
 				{
-                    //GameObject.FindWithTag("Player").GetComponent <PlayerController> ().StartPowerup (1);
                     player.StartPowerup(1);
 					scoreRed -= targetRed;
 				}
@@ -447,7 +443,6 @@ public class SecondaryController : MonoBehaviour {
 
 				if (scoreBlue >= targetBlue && player != null)
 				{
-                    //GameObject.FindWithTag("Player").GetComponent <PlayerController> ().StartPowerup (2);
                     player.StartPowerup(2);
 					scoreBlue -= targetBlue;
 				}
@@ -460,7 +455,6 @@ public class SecondaryController : MonoBehaviour {
 
 				if (scoreYellow >= targetYellow && player != null)
 				{
-                    //GameObject.FindWithTag("Player").GetComponent <PlayerController> ().StartPowerup (3);
                     player.StartPowerup(3);
 					scoreYellow -= targetYellow;
 				}
@@ -473,7 +467,6 @@ public class SecondaryController : MonoBehaviour {
 
 				if (scoreGreen >= targetGreen && player != null)
 				{
-                    //GameObject.FindWithTag("Player").GetComponent <PlayerController> ().StartPowerup (4);
                     player.StartPowerup(4);
 					scoreGreen -= targetGreen;
 				}
@@ -488,7 +481,8 @@ public class SecondaryController : MonoBehaviour {
             {
                 player.StartPowerup(5);
                 //scoreWhite -= targetWhite;
-                targetWhite = Mathf.FloorToInt(targetWhite * 2.2f);
+                //targetWhite = Mathf.FloorToInt(targetWhite * 2.2f);
+                targetWhite = targetWhite + baseTargetWhite + Mathf.FloorToInt(baseTargetWhite * (0.2f * (targetWhite / baseTargetWhite)));
             }
 
             whiteScore.text = "Turret On: " + scoreWhite + " / " + targetWhite;
