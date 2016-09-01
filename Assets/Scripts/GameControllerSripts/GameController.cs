@@ -49,7 +49,14 @@ public class GameController : MonoBehaviour
 
 	void Update ()
 	{
-		if (restart) 
+        // Press escape to go back to menu
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.JoystickButton6))
+        {
+            Quit();
+        }
+
+        // Press R to restart when game over
+        if (restart) 
 		{
 			if (Input.GetKeyDown (KeyCode.R) || Input.GetKeyDown(KeyCode.JoystickButton7) )
 			{
@@ -84,7 +91,7 @@ public class GameController : MonoBehaviour
 
 			if (gameOver) 
 			{
-				restartText.text = "Press 'R' for Restart";
+				restartText.text = "Press 'R' for Restart or 'Esc' for Main Menu";
 				restart = true;
 				break;
 			}
@@ -112,4 +119,9 @@ public class GameController : MonoBehaviour
 		gameOverText.text = "Game Over";
 		gameOver = true;
 	}
+
+    public void Quit()
+    {
+        SceneManager.LoadScene("01a Start");
+    }
 }
