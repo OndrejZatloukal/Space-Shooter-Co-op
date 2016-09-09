@@ -29,15 +29,18 @@ public class MusicManager : MonoBehaviour
 
 	void OnLevelWasLoaded (int level)
 	{
-		AudioClip thisLevelMusic = levelMusicChangeArray [level];
-		Debug.Log ("Playing clip: " + thisLevelMusic);
+        if (level < 2)
+        {
+            AudioClip thisLevelMusic = levelMusicChangeArray[level];
+            Debug.Log("Playing clip: " + thisLevelMusic);
 
-		if (thisLevelMusic) 
-		{
-			audioSource.clip = thisLevelMusic;
-			audioSource.loop = true;
-			audioSource.Play ();
-		}
+            if (thisLevelMusic)
+            {
+                audioSource.clip = thisLevelMusic;
+                audioSource.loop = true;
+                audioSource.Play();
+            }
+        }
 	}
 
 	public void SetVolume (float volume)
