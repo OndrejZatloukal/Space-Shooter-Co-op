@@ -11,6 +11,7 @@ public class Boundary
 
 public class PlayerController : MonoBehaviour 
 {
+    //private GameController gameController;
     private PowerupUI powerupUI;
     private SecondaryController secondaryController;
 
@@ -57,8 +58,13 @@ public class PlayerController : MonoBehaviour
         GameObject gameControllerObject = GameObject.FindWithTag("GameController");
         if (gameControllerObject != null)
         {
+            //gameController = gameControllerObject.GetComponent<GameController>();
             powerupUI = gameControllerObject.GetComponent<PowerupUI>();
         }
+        //if (gameController == null)
+        //{
+        //    Debug.Log("Cannot find 'GameController' Script");
+        //}
         if (powerupUI == null)
         {
             Debug.Log("Cannot find 'PowerupUI' Script");
